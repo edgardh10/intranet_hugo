@@ -46,7 +46,7 @@ public function new_user()
 				$password = '$M$Sy5$rd' . sha1($this->input->post('password')) . '$$u';
 				$check_user = $this->login_user($usuario,$password);
 
-				//var_dump($check_user);
+				// var_dump($check_user);
 				if($check_user)
 				{
 					$data = array(
@@ -83,6 +83,7 @@ public function new_user()
 		$this->db->where('usuario',$usuario);
 		$this->db->where('password',$password);
 		$query = $this->db->get('usuarios');
+
 		if($query->num_rows() == 1)
 		{
 			return $query->row();

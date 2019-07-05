@@ -34,6 +34,23 @@ class Geolocalizacion extends CI_Controller {
 
 	}
 
+	public function clientes()
+	{
+		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
+		{
+			redirect(base_url().'login');
+		}
+
+		$data['title'] = 'Geolocalizacion Clientes';
+
+		$this->load->view('backend/plantilla/header-recursos', $data);
+		$this->load->view('backend/plantilla/header', $data);
+		$this->load->view('backend/plantilla/menu', $data);
+		$this->load->view('backend/geolocalizacion/clientes', $data, FALSE);
+		$this->load->view('backend/plantilla/footer', $data);
+		$this->load->view('backend/plantilla/footer-recursos', $data);
+	}
+
 	public function test($id)
 	{
 		$verified = $this->m_geolocalizacion->verified_user($id);

@@ -81,6 +81,9 @@
 					<li>
 						<a href="<?php echo base_url();?>planes/">Planes</a>
 					</li>
+					<li>
+						<a href="<?php echo base_url();?>geolocalizacion/clientes/">Marcadores</a>
+					</li>
 				</ul>
             
             <?php } else { // usuarios con permisos?>
@@ -153,6 +156,9 @@
 						</ul>
 					</li>
 					<?php } ?>
+					<li>
+						<a href="<?php echo base_url();?>geolocalizacion/clientes/">Marcadores</a>
+					</li>
                 </ul>
           	<?php } ?>
 			</div>
