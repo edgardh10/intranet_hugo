@@ -8,6 +8,7 @@ class Clientes extends CI_Controller {
 		$this->load->model('m_clientes');
 		$this->load->model('m_logistica');
 		$this->load->model('m_usuarios');
+		$this->load->model('m_imagenes');
 		$this->load->library('geolocalizacion');
 		$this->load->model('m_geolocalizacion');
 		}
@@ -46,7 +47,8 @@ class Clientes extends CI_Controller {
 		$this->load->view('backend/plantilla/footer');
 		$this->load->view('backend/plantilla/footer-recursos', $data);
 	}
-	public function perfil($usuarioID){
+	public function perfil($usuarioID)
+	{
 		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
 		{
 			redirect(base_url().'login');
@@ -63,6 +65,7 @@ class Clientes extends CI_Controller {
 		$data['soporte'] = $this->m_clientes->get_soporte();
 		$data['distrito'] = $this->m_clientes->get_distrito();
 		$data['usuarios'] = $this->m_usuarios->get_usuario();		
+		$data['gallery'] = $this->m_imagenes->user_images($usuarioID);		
 
 		$user_id = $data['row']['usuarioID'];
 		$user_data = $this->m_geolocalizacion->verified_user($user_id);
@@ -86,7 +89,7 @@ class Clientes extends CI_Controller {
 		$this->load->view('backend/plantilla/modal', $data);
 		$this->load->view('backend/plantilla/footer', $data);
 		$this->load->view('backend/plantilla/footer-recursos', $data);
-		}
+	}
 	
 	public function ingresado(){
 		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')

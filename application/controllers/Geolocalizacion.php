@@ -51,6 +51,26 @@ class Geolocalizacion extends CI_Controller {
 		$this->load->view('backend/plantilla/footer-recursos', $data);
 	}
 
+
+	public function get_clientes()
+	{
+		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
+		{
+			redirect(base_url().'login');
+		}
+		$data_maps = $this->m_geolocalizacion->all_data_markers();
+		header('Content-type: text/xml');
+		echo '<markers>';
+			foreach ($data_maps as $key => $value) {
+				$name = $value['nombre'] . ' ' . $value['apellido'];
+				if ($name != '') {
+				echo '<marker id="'. $value['id'] .'" name="' . $name . '" address="Buscar Direccion (Pendiente de limpieza de datos)" lat="' . $value['lat'] . '" lng="' . $value['lng'] . '" type="' . $value['distrito'] . '"/>';
+				}
+			}
+		echo '</markers>';
+
+	}
+
 	public function test($id)
 	{
 		$verified = $this->m_geolocalizacion->verified_user($id);
@@ -62,6 +82,8 @@ class Geolocalizacion extends CI_Controller {
 		} else {
 			echo 'Crear nuevo';
 		}
+
+		echo '<marker id="' . $value['id'] . '" name="' . $value['nombre'] . ' ' . $value['apellido'] . '" address="' . $value['direccion'] . '" lat="' . $value['lat'] . '" lng="' . $value['lng'] . '" type="multitel"/>';
 	}
 
 }

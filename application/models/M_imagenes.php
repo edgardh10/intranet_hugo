@@ -13,4 +13,14 @@
 		
 		}
 
+		public function user_images($usuarioID)
+		{
+			$this->db->select('id, image');
+			$this->db->from('gallery');
+			$this->db->join('usuarios', 'gallery.usuarioID = usuarios.usuarioID');
+			$this->db->where('usuarios.usuarioID', $usuarioID);
+			$query = $this->db->get_where();
+			return $query->result_array();
+		}
+
 	}

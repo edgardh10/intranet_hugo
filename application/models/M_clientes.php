@@ -75,7 +75,8 @@
 			}
 			
 		// METODO PARA AGREGAR CLIENTES
-		public function add_cliente(){
+		public function add_cliente()
+		{
 			//$this->load->helper('url');
 			//$slug = url_title($this->input->post('title'), 'dash', TRUE);
 			$pass = '$M$Sy5$rd' . sha1($this->input->post('password')) . '$$u';
@@ -96,7 +97,7 @@
 			);
 			return $this->db->insert('usuarios', $data);
 			
-			}
+		}
 		
 		// METODO PARA ACTUALIZAR UN CLIENTE	
 		public function update_cliente($usuarioID = FALSE)
@@ -106,6 +107,7 @@
 				}
 			$data = array(
 			'distritoID' => $this->input->post('distritoID'),
+			'usuario' => $this->input->post('usuario'),
 			'nombre' => $this->input->post('nombre'),
 			'apellido' => $this->input->post('apellido'),
 			'direccion' => $this->input->post('direccion'),
