@@ -52,7 +52,7 @@
                                             <i class="fa fa-wrench"></i>
                                         </span>
                                         <select name="s_tecnico" id="distrito" class="form-control">
-                                            <option value=""></option>
+                                            <option value="">Seleccionar...</option>
                                             <?php foreach ($usuarios as $row): ?>
                                             <option value="<?php echo $row['usuarioID'] ?>"><?php echo $row['nombre'] ?> <?php echo $row['apellido'] ?></option>
                                             <?php endforeach ?>

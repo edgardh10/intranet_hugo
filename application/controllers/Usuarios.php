@@ -57,9 +57,11 @@ class Usuarios extends CI_Controller {
 		}
 		$data['row'] = $this->m_usuarios->get_usuario($usuarioID);
 		$data['permiso'] = $this->m_usuarios->get_permiso($usuarioID);
-		$data['distrito'] = $this->m_clientes->get_distrito();
 
-		$nivel = $data['row']['nivel'];
+		$data['departamentos'] = $this->m_clientes->get_departamentos();
+		$data['departamento'] = $this->m_clientes->name_departamento_provincia($usuarioID, 'departamento');
+		$data['provincia'] = $this->m_clientes->name_departamento_provincia($usuarioID, 'provincia');
+		$nivel = $this->session->userdata('nivel');
 		$data['niveles'] = $this->nivelesAcceso($nivel);
 		$data['title'] = $data['row']['apellido'].' | Perfil';
 		$data['recurso'] = 'perfil_user';
@@ -69,7 +71,8 @@ class Usuarios extends CI_Controller {
 		$this->load->view('backend/usuarios/v_user_cuenta', $data);
 		$this->load->view('backend/plantilla/footer', $data);
 		$this->load->view('backend/plantilla/footer-recursos', $data);
-		}
+	}
+
 	public function cambiar_pass($usuarioID){
 		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
 		{
@@ -123,5 +126,22 @@ class Usuarios extends CI_Controller {
 				return array('nivel' => ['empleado', 'admin', 'admin_sup']);
 				break;
 		}
+	}
+
+	// añadiendo permisos de torre
+	public function set_permiso_torres()
+	{
+		$this->m_usuarios->set_permiso_torres();
+		$this->session->set_flashdata('mensaje_acceso', 1);
+		redirect (base_url().'usuarios/perfil/'.$this->input->post('usuarioID'));
+	}
+
+	public function delete_permiso_torres($permisoID)
+	{
+		$this->load->library('user_agent');
+		
+		$this->m_usuarios->delete_permiso_torres($permisoID);
+		$this->session->set_flashdata('mensaje_acceso', 1);
+		redirect ($this->agent->referrer());
 	}
 }

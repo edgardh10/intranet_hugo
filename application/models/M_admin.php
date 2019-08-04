@@ -7,9 +7,9 @@
 			//$this->load->database();
 			}
 		public function clientes_distrito(){
-				$this->db->select('COUNT(usuarios.usuarioID) AS cantidad, distrito.distrito');
+				$this->db->select('COUNT(usuarios.usuarioID) AS cantidad, distritos.distrito');
 				$this->db->from('usuarios');
-				$this->db->join('distrito', 'usuarios.distritoID = distrito.distritoID');
+				$this->db->join('distritos', 'usuarios.distritoID = distritos.id');
 				$this->db->where('usuarios.nivel', 'cliente');
 				$this->db->where('usuarios.control !=', 'retirado');
 				$this->db->group_by('distrito');
@@ -18,10 +18,10 @@
 				return $query->result_array();
 			}
 		public function clientes_torre(){
-				$this->db->select('COUNT(usuarios.torreID) AS cantidad, torres.torre, distrito.distrito');
+				$this->db->select('COUNT(usuarios.torreID) AS cantidad, torres.torre, distritos.distrito');
 				$this->db->from('torres');
 				$this->db->join('usuarios', 'torres.torreID = usuarios.torreID');
-				$this->db->join('distrito', 'torres.distritoID = distrito.distritoID');
+				$this->db->join('distritos', 'torres.distritoID = distritos.id');
 				$this->db->where('usuarios.nivel', 'cliente');
 				$this->db->where('usuarios.control !=', 'retirado');
 				$this->db->group_by('torre');
@@ -38,9 +38,9 @@
 				return $query->result_array();
 			}
 		public function receptores_distrito(){
-				$this->db->select('Count(*) AS cantidad, usuarios.distritoID, distrito.distrito, equipos_marca.marca');
+				$this->db->select('Count(*) AS cantidad, usuarios.distritoID, distritos.distrito, equipos_marca.marca');
 				$this->db->from('usuarios');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
+				$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
 				$this->db->join('equipos', 'usuarios.equiposID = equipos.equiposID');
 				$this->db->join('equipos_marca', 'equipos.marcasID = equipos_marca.marcasID');
 				$this->db->where('nivel', 'cliente');
@@ -50,9 +50,9 @@
 				return $query->result_array();
 			}
 		public function router_distrito(){
-				$this->db->select('Count(*) AS cantidad, usuarios.distritoID, distrito.distrito, equipos_marca.marca');
+				$this->db->select('Count(*) AS cantidad, usuarios.distritoID, distritos.distrito, equipos_marca.marca');
 				$this->db->from('usuarios');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
+				$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
 				$this->db->join('equipos', 'usuarios.mac = equipos.mac');
 				$this->db->join('equipos_marca', 'equipos.marcasID = equipos_marca.marcasID');
 				$this->db->where('nivel', 'cliente');

@@ -58,6 +58,32 @@ jQuery(document).ready(function() {
 	Demo.init(); // init demo features
 	FormWizard.init();
 	Todo.init();
+  $("#departamento").change(function () {
+    
+    var url_base = '<?php echo base_url(); ?>';
+
+    $('#distrito').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+    
+    $("#departamento option:selected").each(function () {
+      departamentoID = $(this).val();
+      $.post(url_base + "/clientes/get_provincias", { departamentoID: departamentoID }, function(data){
+        $("#provincia").html(data);
+      });
+    });
+  });
+
+  $("#provincia").change(function () {
+
+    var url_base = '<?php echo base_url(); ?>';
+
+    $("#provincia option:selected").each(function () {
+      provinciaID = $(this).val();
+      $.post(url_base + "/clientes/get_distritos", { provinciaID: provinciaID }, function(data){
+        $("#distrito").html(data);
+      });
+    });
+  });
+
 });
 </script>
 
@@ -85,9 +111,35 @@ jQuery(document).ready(function() {
 Layout.init(); // init current layout
 Demo.init(); // init demo features
    TableAdvanced.init();
+
+   $("#departamento").change(function () {
+    
+      var url_base = '<?php echo base_url(); ?>';
+
+      $('#distrito').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+      
+      $("#departamento option:selected").each(function () {
+        departamentoID = $(this).val();
+        $.post(url_base + "/clientes/get_provincias", { departamentoID: departamentoID }, function(data){
+          $("#provincia").html(data);
+        });
+      });
+    });
+
+    $("#provincia").change(function () {
+
+      var url_base = '<?php echo base_url(); ?>';
+
+      $("#provincia option:selected").each(function () {
+        provinciaID = $(this).val();
+        $.post(url_base + "/clientes/get_distritos", { provinciaID: provinciaID }, function(data){
+          $("#distrito").html(data);
+        });
+      });
+    });
 });
 </script>
-<?php } if($recurso == 'generar_facturas'){?>
+<?php } if($recurso == 'generar_facturas'){ ?>
 <script type="text/javascript" src="<?php echo base_url();?>recursos/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>recursos/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>recursos/global/plugins/bootstrap-daterangepicker/moment.min.js"></script>
@@ -133,16 +185,44 @@ Demo.init(); // init demo features
 }();
 </script>
 <script>
-        jQuery(document).ready(function() {       
+    jQuery(document).ready(function() {       
            // initiate layout and plugins
-        Metronic.init(); // init metronic core components
+    Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 		Demo.init(); // init demo features
 		ComponentsPickers.init();
 		Portfolio.init();
     TableAdvanced.init();
-        }); 
-    </script>
+
+    $("#departamento").change(function () {
+    
+      var url_base = '<?php echo base_url(); ?>';
+
+      $('#distrito').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+      
+      $("#departamento option:selected").each(function () {
+        departamentoID = $(this).val();
+        $.post(url_base + "/clientes/get_provincias", { departamentoID: departamentoID }, function(data){
+          $("#provincia").html(data);
+        });
+      });
+    });
+
+    $("#provincia").change(function () {
+
+      var url_base = '<?php echo base_url(); ?>';
+
+      $("#provincia option:selected").each(function () {
+        provinciaID = $(this).val();
+        $.post(url_base + "/clientes/get_distritos", { provinciaID: provinciaID }, function(data){
+          $("#distrito").html(data);
+        });
+      });
+    });
+
+  }); 
+</script>
+
 <!-- -->
 <!-- END JAVASCRIPTS -->
 <?php } if($recurso == 'lista_usuarios'){ ?>
@@ -172,9 +252,36 @@ Demo.init(); // init demo features
 jQuery(document).ready(function() {       
    	// initiate layout and plugins
    	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	Demo.init(); // init demo features\
-	Profile.init(); // init page demo
+    Layout.init(); // init current layout
+	  Demo.init(); // init demo features\
+    Profile.init(); // init page demo
+
+    $("#departamento").change(function () {
+    
+      var url_base = '<?php echo base_url(); ?>';
+
+      $('#distrito').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+      
+      $("#departamento option:selected").each(function () {
+        departamentoID = $(this).val();
+        $.post(url_base + "/clientes/get_provincias", { departamentoID: departamentoID }, function(data){
+          $("#provincia").html(data);
+        });
+      });
+    });
+
+    $("#provincia").change(function () {
+
+      var url_base = '<?php echo base_url(); ?>';
+
+      $("#provincia option:selected").each(function () {
+        provinciaID = $(this).val();
+        $.post(url_base + "/clientes/get_distritos", { provinciaID: provinciaID }, function(data){
+          $("#distrito").html(data);
+        });
+      });
+    });
+
 });
 </script>
 <!-- END JAVASCRIPTS -->

@@ -208,12 +208,13 @@ class Geolocalizacion
 		  return $renderMapas;
 	}
 
-	public function pop_mapa_mensaje($nom, $ape, $dir, $dis)
+	public function pop_mapa_mensaje($nom, $ape, $dir, $dis, $lat, $lng)
 	{
 		$content = "\"<div id='pop_map'>\"+
 						\"<h3>Ubicación del Cliente</h3>\"+
 						\"<p><strong>Nombre:</strong> " . $nom . " " . $ape . "</p>\"+
 						\"<p><strong>Dirección:</strong> " . $dir . " / " . $dis . "</p>\"+
+						\"<p><a href='https://www.google.com/maps/@" . $lat . "," . $lng . ",18z' target='_blank'>Ver en google maps</a></p>\"+
 					\"</div>\"";
 		return $content;
 	}

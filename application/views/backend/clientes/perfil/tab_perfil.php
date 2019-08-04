@@ -29,16 +29,31 @@
 
                 </li>
 				<li><a href="javascript:;"><strong>Cliente desde:</strong> <?php echo $row['fechaInst'];?> <span><i class="fa fa-check"></i> </span></a></li>
+				<li><a href="javascript:void(0)" onclick="showAjaxModal('<?php echo base_url(); ?>television/modal/<?php echo $row['usuarioID']; ?>');" title="Editar">Añadir Plan de Tv</a></li>
                 <?php if($row['control']=='retirado'){ ?>
                 	<?php if($this->session->userdata('nivel')=='admin_sup'){ ?>
                 <li><a class="btn grey-cascade" href="#" onclick="confirm_modal('<?php echo base_url(); ?>modal/eliminar_cliente/<?php echo $row['usuarioID']; ?>');" title="Eliminar"><i class="fa fa-trash"></i> Eliminar del sistema</a></li>
                 <?php }} ?>
 			</ul>
 		</div>
+		<?php
+			$user_tv = $this->db->get_where('television' , array('usuarioID' => $row['usuarioID'], 'status' => 1 ));
+			// $user_tv = $user_tv->row_array();
+		?>
 		<div class="col-md-9">
 			<div class="row">
 				<div class="col-md-8 profile-info">
-					<h1><?php echo $row['nombre'];?> ➟ DNI: <?php echo $row['usuario'];?> </h1>
+					<h1><?php echo $row['nombre'];?> ➟ DNI: <?php echo $row['usuario'];?> 
+						<span style="float: right;">
+							<?php if ($row['cuotas'] != 0): ?>
+								<i class="fa fa-globe" aria-hidden="true" style="font-size: 30px;"></i>
+							<?php endif ?>
+							<?php if ($user_tv->num_rows() == 1): ?>
+								<i class="fa fa-desktop" aria-hidden="true" style="font-size: 26px;"></i>
+							<?php endif ?>
+							
+						</span>
+					</h1>
 					<p>A este cliente se le instalo el servicio el <?php echo $row['fechaInst'];?> y su domicilio queda en <?php echo $row['direccion'];?>, distrito de <?php echo $row['distrito'];?></p>
 					<ul class="list-inline">
 						<li><i class="fa fa-map-marker"></i> <?php echo $row['distrito'];?></li>

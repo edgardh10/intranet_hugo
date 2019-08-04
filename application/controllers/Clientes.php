@@ -18,7 +18,13 @@ class Clientes extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['usuarios'] = $this->m_clientes->get_usuario();
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data['usuarios'] = $this->m_clientes->get_usuario();
+		} else {
+			$data['usuarios'] = $this->m_clientes->users_group('activado');
+		}
+
 		$data['title'] = 'Clientes Activos';
 		$data['recurso'] = 'tablas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -37,7 +43,7 @@ class Clientes extends CI_Controller {
 		}
 		 // Agregar nuevo cliente
 		$data['usuarios'] = $this->m_clientes->get_usuario();
-		$data['distrito'] = $this->m_clientes->get_distrito();
+		$data['departamentos'] = $this->m_clientes->get_departamentos();
 		$data['title'] = 'Agregar Clientes Nuevos';
 		$data['recurso'] = 'agregar';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -47,13 +53,43 @@ class Clientes extends CI_Controller {
 		$this->load->view('backend/plantilla/footer');
 		$this->load->view('backend/plantilla/footer-recursos', $data);
 	}
+
+	public function get_provincias()
+	{
+		$this->m_clientes->get_provincias();
+	}
+
+	public function get_distritos()
+	{
+		$this->m_clientes->get_distritos();
+	}
+
 	public function perfil($usuarioID)
 	{
 		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
 		{
 			redirect(base_url().'login');
 		}
+
 		$data['row'] = $this->m_clientes->get_usuario($usuarioID);
+		$data['usuarios'] = $this->m_usuarios->get_usuario();		
+		
+		if ( $this->session->userdata('nivel') == 'empleado' ) {
+			
+			$data['row'] = $this->m_clientes->user_group($usuarioID);
+			$cheking = $this->m_clientes->user_group($usuarioID);
+
+			if (!$cheking) {
+				$this->load->library('user_agent');
+				redirect ($this->agent->referrer());
+			}
+			
+			$data['usuarios'] = $this->m_usuarios->get_usuario_group();		
+
+		}
+
+		$data['departamento'] = $this->m_clientes->name_departamento_provincia($usuarioID, 'departamento');
+		$data['provincia'] = $this->m_clientes->name_departamento_provincia($usuarioID, 'provincia');
 		$data['torre'] = $this->m_clientes->get_torre($usuarioID);
 		$data['transmisor'] = $this->m_clientes->get_transmisor($usuarioID);
 		$data['radio'] = $this->m_clientes->get_radio($usuarioID);
@@ -63,14 +99,13 @@ class Clientes extends CI_Controller {
 		$data['transmisores'] = $this->m_logistica->get_transmisores();
 		$data['radios'] = $this->m_logistica->get_radios();
 		$data['soporte'] = $this->m_clientes->get_soporte();
-		$data['distrito'] = $this->m_clientes->get_distrito();
-		$data['usuarios'] = $this->m_usuarios->get_usuario();		
+		$data['departamentos'] = $this->m_clientes->get_departamentos();
 		$data['gallery'] = $this->m_imagenes->user_images($usuarioID);		
 
 		$user_id = $data['row']['usuarioID'];
 		$user_data = $this->m_geolocalizacion->verified_user($user_id);
 		if ($user_data) {
-			$set_pop_map = $this->geolocalizacion->pop_mapa_mensaje($user_data->nombre, $user_data->apellido, $user_data->direccion, $user_data->distrito);
+			$set_pop_map = $this->geolocalizacion->pop_mapa_mensaje($user_data->nombre, $user_data->apellido, $user_data->direccion, $user_data->distrito, $user_data->lat, $user_data->lng );
 
 		$data['renderMapas'] = $this->geolocalizacion->geoMapas($user_data->lat, $user_data->lng, $set_pop_map);
 		} else {
@@ -114,7 +149,13 @@ class Clientes extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['usuarios'] = $this->m_clientes->usuarios_desactivados();
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data['usuarios'] = $this->m_clientes->usuarios_desactivados();
+		} else {
+			$data['usuarios'] = $this->m_clientes->users_group('retirado');
+		}
+
 		$data['title'] = 'Clientes Desactivados';
 		$data['recurso'] = 'tablas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -131,7 +172,13 @@ class Clientes extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['usuarios'] = $this->m_clientes->usuarios_cortados();
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data['usuarios'] = $this->m_clientes->usuarios_cortados();
+		} else {
+			$data['usuarios'] = $this->m_clientes->users_group('cortado');
+		}
+
 		$data['title'] = 'Clientes con servicio Cortado';
 		$data['recurso'] = 'tablas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -148,7 +195,13 @@ class Clientes extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['usuarios'] = $this->m_clientes->usuarios_morosos();
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data['usuarios'] = $this->m_clientes->usuarios_morosos();
+		} else {
+			$data['usuarios'] = $this->m_clientes->users_group_morosos();
+		}
+
 		$data['title'] = 'Clientes Morosos';
 		$data['recurso'] = 'tablas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -159,15 +212,18 @@ class Clientes extends CI_Controller {
 		$this->load->view('backend/plantilla/footer-recursos', $data);
 	}
 	
-	public function individual(){// generacion de factura individual
+	public function individual() // generacion de factura individual
+	{
 		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
 		{
 			redirect(base_url().'login');
 		}
+		
 		$this->m_clientes->factura_individual();
 		$this->session->set_flashdata('factura', 1);
 		redirect(base_url().'clientes/perfil/'.$_POST['usuarioID'], 'refresh');
-		}
+	}
+
 	public function agregar_telefono(){
 		if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
 		{

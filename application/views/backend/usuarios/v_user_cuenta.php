@@ -17,6 +17,16 @@
 			<!-- BEGIN PAGE CONTENT INNER -->
 			<div class="row margin-top-10">
 				<div class="col-md-12">
+					
+					<?php
+                        $success = $this->session->flashdata('mensaje_acceso');
+						if ($success) {// alerta para cuando editamos una marca ?>
+						   <div class="alert alert-warning alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                            <strong>¡Se ha denegado el acceso a la torre seleccionada!</strong>.
+						</div>
+					<?php } ?>
+
 					<!-- BEGIN PROFILE SIDEBAR -->
 					<div class="profile-sidebar" style="width: 250px;">
 						<!-- PORTLET MAIN -->
@@ -108,64 +118,8 @@
 									</div>
 									<div class="portlet-body">
 										<div class="tab-content">
-											<!-- PERSONAL INFO TAB -->
-											<div class="tab-pane active" id="tab_1_1">
-												<form role="form" method="post" action="<?php echo base_url(); ?>usuarios/actualizar_user/<?php echo $row['usuarioID']; ?>">
-													<div class="form-group">
-														<label class="control-label"><strong>Nombre</strong></label>
-														<input type="text" name="nombre" class="form-control" value="<?php echo $row['nombre']; ?>"/>
-													</div>
-													<div class="form-group">
-														<label class="control-label"><strong>Apellido</strong></label>
-														<input type="text" name="apellido" class="form-control" value="<?php echo $row['apellido']; ?>"/>
-													</div>
-													<div class="form-group">
-														<label class="control-label"><strong>Distrito</strong></label>
-														<select name="distritoID" class="form-control select2_category">
-                                                        <?php foreach ($distrito as $dist): ?>
-                                                            <option value="<?php echo $dist['distritoID'] ?>" <?php if($row['distritoID']==$dist['distritoID']){ echo 'selected="selected"';};?>><?php echo $dist['distrito'] ?></option>
-                                                            <?php endforeach ?>
-                                                        
-                                                        </select>
-													</div>
-                                                    <div class="form-group">
-														<label class="control-label"><strong>Dirección</strong></label>
-														<input type="text" name="direccion" class="form-control" value="<?php echo $row['direccion']; ?>"/>
-													</div>
-                                                    <div class="form-group">
-														<label class="control-label"><strong>Teléfono</strong></label>
-														<input type="text" name="correo_control" class="form-control" value="<?php echo $row['correo_control']; ?>"/>
-													</div>
-                                                    <div class="form-group">
-														<label class="control-label"><strong>Correo</strong></label>
-														<input type="text" name="correo" class="form-control" value="<?php echo $row['correo']; ?>"/>
-													</div>
-                                                    <div class="form-group">
-														<label class="control-label"><strong>Puesto</strong></label>
-														<input type="text" name="puesto" class="form-control" value="<?php echo $row['puesto']; ?>"/>
-													</div>
-                                                    <div class="form-group">
-														<label class="control-label"><strong>Sueldo: S/. <?php echo $row['cuotas']; ?></strong></label>
-														<input type="text" name="cuotas" class="form-control" value="<?php echo $row['cuotas']; ?>"/>
-													</div>                                                    
-													<div class="form-group">
-														<label class="control-label"><strong>Nivel de acceso</strong></label>
-														<select name="nivel_acceso" class="form-control select2_category">
-															<?php
-																$accesos = $niveles['nivel'];
-																foreach ($accesos as $acceso) {		
-															?>
-															<option value="<?= $acceso; ?>" <?php if ($row['nivel'] == $acceso) { echo 'selected="selected"';} ?> ><?php if ($acceso == 'admin_sup') { echo 'Super Admin';} else { echo ucfirst($acceso);} ?></option>
-															<?php } ?>
-														</select>
-													</div>
-
-													<div class="margiv-top-10">
-                                                    	<input type="submit" value="Guardar Cambios" class="btn grey-cascade" />
-													</div>
-												</form>
-											</div>
-											<!-- END PERSONAL INFO TAB -->
+											<!-- tab_1_1 -->
+											<?php include '_tab_cuenta.php'; ?>
 											<!-- CHANGE AVATAR TAB -->
 											<div class="tab-pane" id="tab_1_2">
 												<p>Imagen de perfil personal</p>
@@ -253,85 +207,9 @@
 											</div>
 											<!-- END CHANGE PASSWORD TAB -->
 											<!-- PRIVACY SETTINGS TAB -->
-											<div class="tab-pane" id="tab_1_5">
-												<form action="<?php echo base_url(); ?>usuarios/editar_permisos/<?php echo $row['usuarioID']; ?>" method="post">
-													<table class="table table-light table-hover">
-													<tr>
-														<td>Acceso a modulo Clientes</td>
-														<td>
-															<label class="uniform-inline">
-                                                            <input type="radio" name="clientes" value="<?php echo $permiso['clientes']; ?>" checked  />
-                                                            <?php echo ucfirst($permiso['clientes']); ?></label>
-                                                            <?php if($permiso['clientes']=='denegado') { ?>
-                                                            <label class="uniform-inline">
-															<input type="radio" name="clientes" value="permitido"/>
-															Permitir </label>
-                                                            <?php } elseif($permiso['clientes']=='permitido') { ?>
-															<label class="uniform-inline">
-															<input type="radio" name="clientes" value="denegado"/>
-															Denegar </label>
-                                                            <?php } ?>
-														</td>
-													</tr>
-                                                    <tr>
-														<td>Acceso a modulo Pagos</td>
-														<td>
-															<label class="uniform-inline">
-                                                            <input type="radio" name="pagos" value="<?php echo $permiso['pagos']; ?>" checked  />
-                                                            <?php echo ucfirst($permiso['pagos']); ?></label>
-                                                            <?php if($permiso['pagos']=='denegado') { ?>
-                                                            <label class="uniform-inline">
-															<input type="radio" name="pagos" value="permitido"/>
-															Permitir </label>
-                                                            <?php } elseif($permiso['pagos']=='permitido') { ?>
-															<label class="uniform-inline">
-															<input type="radio" name="pagos" value="denegado"/>
-															Denegar </label>
-                                                            <?php } ?>
-														</td>
-													</tr>
-                                                    <tr>
-														<td>Acceso a modulo Servicio al cliente</td>
-														<td>
-															<label class="uniform-inline">
-                                                            <input type="radio" name="servicio_cliente" value="<?php echo $permiso['servicio_cliente']; ?>" checked  />
-                                                            <?php echo ucfirst($permiso['servicio_cliente']); ?></label>
-                                                            <?php if($permiso['servicio_cliente']=='denegado') { ?>
-                                                            <label class="uniform-inline">
-															<input type="radio" name="servicio_cliente" value="permitido"/>
-															Permitir </label>
-                                                            <?php } elseif($permiso['servicio_cliente']=='permitido') { ?>
-															<label class="uniform-inline">
-															<input type="radio" name="servicio_cliente" value="denegado"/>
-															Denegar </label>
-                                                            <?php } ?>
-														</td>
-													</tr>
-                                                    <tr>
-														<td>Acceso a modulo Logistica</td>
-														<td>
-															<label class="uniform-inline">
-                                                            <input type="radio" name="logistica" value="<?php echo $permiso['logistica']; ?>" checked  />
-                                                            <?php echo ucfirst($permiso['logistica']); ?></label>
-                                                            <?php if($permiso['logistica']=='denegado') { ?>
-                                                            <label class="uniform-inline">
-															<input type="radio" name="logistica" value="permitido"/>
-															Permitir </label>
-                                                            <?php } elseif($permiso['logistica']=='permitido') { ?>
-															<label class="uniform-inline">
-															<input type="radio" name="logistica" value="denegado"/>
-															Denegar </label>
-                                                            <?php } ?>
-														</td>
-													</tr>
-													</table>
-													<!--end profile-settings-->
-													<div class="margin-top-10">
-                                                    	<input type="hidden" name="usuarioID" value="<?php echo $row['usuarioID']; ?>" />
-                                                    	<input type="submit" class="btn grey-cascade" value="Asignar permisos" />
-													</div>
-												</form>
-											</div>
+											
+												<!-- tab_1_5 -->
+												<?php include '_user_permisos.php'; ?>
 											<!-- END PRIVACY SETTINGS TAB -->
 										</div>
 									</div>

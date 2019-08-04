@@ -144,6 +144,35 @@
 														<input type="text" class="form-control" name="apellido"/>
 													</div>
 												</div>
+												<div class="form-group">
+													<label class="control-label col-md-3">Departamento <span class="required">
+													* </span>
+													</label>
+													<div class="col-md-4 input-group">
+                                                    <span class="input-group-addon">
+                                                        	<i class="fa fa-photo"></i>
+                                                        </span>
+														<select name="departamentoID" id="departamento" class="form-control">
+															<option value=""></option>
+															<?php foreach ($departamentos as $row): ?>
+                                                            <option value="<?php echo $row['id'] ?>"><?php echo $row['departamento'] ?></option>
+                                                            <?php endforeach ?>
+														</select>
+													</div>
+												</div>
+                                                <div class="form-group">
+													<label class="control-label col-md-3">Provincia <span class="required">
+													* </span>
+													</label>
+													<div class="col-md-4 input-group">
+                                                    <span class="input-group-addon">
+                                                        	<i class="fa fa-photo"></i>
+                                                        </span>
+														<select name="provinciaID" id="provincia" class="form-control">
+															<option value=""></option>
+														</select>
+													</div>
+												</div>
                                                 <div class="form-group">
 													<label class="control-label col-md-3">Distrito <span class="required">
 													* </span>
@@ -154,9 +183,6 @@
                                                         </span>
 														<select name="distritoID" id="distrito" class="form-control">
 															<option value=""></option>
-															<?php foreach ($distrito as $row): ?>
-                                                            <option value="<?php echo $row['distritoID'] ?>"><?php echo $row['distrito'] ?></option>
-                                                            <?php endforeach ?>
 														</select>
 													</div>
 												</div>

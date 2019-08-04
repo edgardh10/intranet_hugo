@@ -99,18 +99,42 @@
 							<form class="form-horizontal" role="form" method="post" action="<?php echo base_url(); ?>logistica/agregar_torre/">
 								<div class="form-body">
 									<div class="form-group">
+										<label class="col-md-3 control-label">Departamento</label>
+										<div class="col-md-9">
+											<div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-map-marker"></i>
+												</span>
+												<select name="distritoID" id="departamento" class="form-control">
+									                <option value="-1">Seleccionar...</option>
+									                <?php foreach ($departamentos as $d): ?>
+									                    <option value="<?php echo $d['id'] ?>"><?php echo $d['departamento'] ?></option>
+									                <?php endforeach ?>
+									            </select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Provincia</label>
+										<div class="col-md-9">
+											<div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-map-marker"></i>
+												</span>
+												<select name="provinciaID" id="provincia" class="form-control">
+									            </select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="col-md-3 control-label">Distrito</label>
 										<div class="col-md-9">
 											<div class="input-group">
 												<span class="input-group-addon">
 												<i class="fa fa-map-marker"></i>
 												</span>
-												<select name="distritoID" class="form-control">
-                                                	<option value="-1"></option>
-                                                	<?php foreach($distrito as $dis): ?>
-                                                    <option value="<?php echo $dis['distritoID']; ?>"><?php echo $dis['distrito']; ?></option>
-                                                    <?php endforeach ?>
-                                                </select>
+												<select name="distritoID" id="distrito" class="form-control">
+									            </select>
 											</div>
 										</div>
 									</div>

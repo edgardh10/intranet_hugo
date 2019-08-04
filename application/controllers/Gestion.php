@@ -16,8 +16,20 @@ class Gestion extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['soporte_hoy'] = $this->m_gestion->soporte_uno();
-		$data['soporte'] = $this->m_gestion->soporte_cerrado();
+
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			
+			$data['soporte_hoy'] = $this->m_gestion->soporte_uno();
+			$data['soporte'] = $this->m_gestion->soporte_cerrado();
+
+		} else {
+			
+			$data['soporte_hoy'] = $this->m_gestion->groups_soporte();
+			$data['soporte'] = $this->m_gestion->groups_soporte_cerrado();
+
+		}
+
 		$data['title'] = 'Soporte al Cliente';
 		$data['recurso'] = 'tablas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -115,8 +127,15 @@ class Gestion extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['clientes'] = $this->m_clientes->get_usuario();
-		$data['usuarios'] = $this->m_usuarios->get_usuario();
+		
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data['clientes'] = $this->m_clientes->get_usuario();
+			$data['usuarios'] = $this->m_usuarios->get_usuario();
+		} else {
+			$data['clientes'] = $this->m_clientes->users_group('activado');
+			$data['usuarios'] = $this->m_usuarios->get_usuario_group();
+		}
+
 		$data['title'] = 'Agregar Nuevo Soporte';
 		$data['recurso'] = 'agregar';
 		$this->load->view('backend/plantilla/header-recursos', $data);

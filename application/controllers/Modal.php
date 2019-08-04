@@ -88,11 +88,13 @@
 		
 		public function modal_editar_torre($torreID){ // CARGA EL MODAL PARA EDITAR TORRE
 			if($this->session->userdata('nivel') == FALSE || $this->session->userdata('nivel') == 'cliente')
-				{
-					redirect(base_url().'login');
-				}
+			{
+				redirect(base_url().'login');
+			}
 			$data['torre'] = $this->m_modal->traer_torre($torreID);
-			$data['distrito'] = $this->m_clientes->get_distrito();
+
+			$data['departamentos'] = $this->m_clientes->get_departamentos();
+			// $data['distrito'] = $this->m_clientes->get_distrito();
 			$this->load->view('backend/logistica/v_modal_editar_torre', $data);
 		}
 		public function eliminar_torre($torreID){ // MODAL QUE ELIMINA TORRE

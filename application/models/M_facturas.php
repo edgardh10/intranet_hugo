@@ -11,64 +11,98 @@
 		{
 
 		}
+		
 		// FUNCION PARA TRAER FACTURAS PAGADAS
 		public function get_factura($usuarioID = FALSE)
-			{
-				
-			}
-		public function factura_inpagas(){
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
-				$this->db->where('estado', 'inpago');
-				$this->db->order_by('pagosID', 'DESC');
-				$query = $this->db->get();
-				return $query->result_array();
-			}
-		public function factura_aprobar(){
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
-				$this->db->where('estado', 'pendiente');
-				$query = $this->db->get();
-				return $query->result_array();
-			}
-		public function factura_pagadas(){
+		{
 			
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
-				$this->db->where('estado', 'pagado');
-				$this->db->where('nivel', 'cliente');
-				$this->db->where('control !=', 'retirado');
-				$this->db->order_by('pagosID', 'DESC');
-				$query = $this->db->get();
-				return $query->result_array();
-			}
-		public function seleccionar_datos(){ // para generar las facturas
-				$this->db->select('usuarioID, cuotas');
-				$this->db->from('usuarios');
-				$this->db->where('nivel', 'cliente');
-				$this->db->where('control', 'activado');
-				$query = $this->db->get();
-				return $query->result_array();
 		}
+		
+		public function factura_inpagas()
+		{
+			$this->db->select('*');
+			$this->db->from('usuarios');
+			$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
+			$this->db->where('estado', 'inpago');
+			$this->db->order_by('pagosID', 'DESC');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+
+		public function factura_inpagas_group()
+		{
+			$this->db->select('pagosID, nombre, apellido, cuota, mes, ope, fecha_pago, usuarios.usuarioID, fecha_generada');
+			$this->db->from('usuarios');
+			$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
+			$this->db->join('permisos_torre', 'usuarios.torreID = permisos_torre.torreID');
+			$this->db->where('permisos_torre.usuarioID', $this->session->userdata('usuarioID'));
+			$this->db->where('estado', 'inpago');
+			$this->db->order_by('pagosID', 'DESC');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+		
+		public function factura_aprobar()
+		{
+			$this->db->select('*');
+			$this->db->from('usuarios');
+			$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
+			$this->db->where('estado', 'pendiente');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+		
+		public function factura_pagadas()
+		{
+			$this->db->select('*');
+			$this->db->from('usuarios');
+			$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
+			$this->db->where('estado', 'pagado');
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('control !=', 'retirado');
+			$this->db->order_by('pagosID', 'DESC');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+		
+		public function seleccionar_datos() // para generar las facturas de datos
+		{
+			$this->db->select('usuarioID, cuotas');
+			$this->db->from('usuarios');
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('control', 'activado');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+
+		public function seleccionar_television() // para generar las facturas de TV
+		{
+			$this->db->select('television.usuarioID, cuota');
+			$this->db->from('usuarios');
+			$this->db->join('television', 'television.usuarioID = usuarios.usuarioID');
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('control', 'activado');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+
 		public function factura_detalle($pagosID = FALSE)
-				{
-				if($pagosID === FALSE)
-				{
-					show_404();					
-				}
-				$this->db->select('*');
-				$this->db->from('pagos');
-				$this->db->join('usuarios', 'pagos.usuarioID = usuarios.usuarioID');
-				$this->db->join('distrito', 'usuarios.distritoID = distrito.distritoID');
-				$this->db->where('nivel', 'cliente');
-				$this->db->where('pagosID', $pagosID);
-				$query = $this->db->get_where();
-				return $query->row_array();
-			
+		{
+			if($pagosID === FALSE)
+			{
+				show_404();					
 			}
+			$this->db->select('*');
+			$this->db->from('pagos');
+			$this->db->join('usuarios', 'pagos.usuarioID = usuarios.usuarioID');
+			$this->db->join('distritos', 'usuarios.distritoID = distritos.id');
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('pagosID', $pagosID);
+			$query = $this->db->get_where();
+			return $query->row_array();
+		
+		}
+
 		public function actualizar_factura($pagosID)
 		{
 			if ($pagosID === FALSE){

@@ -36,6 +36,7 @@
 									<li><strong>Dirección:</strong> <?php echo $row['direccion'];?>,</li>
 									<li><?php echo $row['distrito'];?>,</li>
                                     <li>Lima, Perú.</li>
+                                    <li><a href="<?php echo base_url(); ?>clientes/perfil/<?php echo $row['usuarioID']; ?>">Ir al Perfil</a></li>
 								</ul>
 							</div>
 							<div class="col-xs-4">
@@ -68,75 +69,65 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr>
-									<td>1</td>
-									<td>Servicio de Internet</td>
-									<td class="hidden-480">Servicio de internet por el mes de <?php echo $row['mes'];?></td>
-									<td class="hidden-480">1 mes</td>
-									<td class="hidden-480">S/. <?php echo $row['cuota'];?>.00</td>
-									<td>S/. <?php echo $row['cuota'];?>.00</td>
-								</tr>
-<!--								<tr>
-									<td>
-										 2
-									</td>
-									<td>
-										 Furniture
-									</td>
-									<td class="hidden-480">
-										 Office furniture purchase
-									</td>
-									<td class="hidden-480">
-										 15
-									</td>
-									<td class="hidden-480">
-										 $169
-									</td>
-									<td>
-										 $4169
-									</td>
-								</tr>
-								<tr>
-									<td>
-										 3
-									</td>
-									<td>
-										 Foods
-									</td>
-									<td class="hidden-480">
-										 Company Anual Dinner Catering
-									</td>
-									<td class="hidden-480">
-										 69
-									</td>
-									<td class="hidden-480">
-										 $49
-									</td>
-									<td>
-										 $1260
-									</td>
-								</tr>
-								<tr>
-									<td>
-										 3
-									</td>
-									<td>
-										 Software
-									</td>
-									<td class="hidden-480">
-										 Payment for Jan 2013
-									</td>
-									<td class="hidden-480">
-										 149
-									</td>
-									<td class="hidden-480">
-										 $12
-									</td>
-									<td>
-										 $866
-									</td>
-								</tr>
--->								</tbody>
+
+								<?php if ( $row['cuota'] == $row['cuotas'] ) { ?>
+									<tr>
+										<td>1</td>
+										<td>Servicio de Internet</td>
+										<td class="hidden-480">Servicio de internet por el mes de <?php echo $row['mes'];?></td>
+										<td class="hidden-480">1 mes</td>
+										<td class="hidden-480">S/. <?php echo $row['cuota'];?></td>
+										<td>S/. <?php echo $row['cuota'];?></td>
+									</tr>
+								<?php } else { ?>
+									
+									<?php
+
+										$user_tv = $this->db->get_where('television' , array('usuarioID' => $row['usuarioID']));
+										$user_tv = $user_tv->row_array(); // traemos el plan de tv
+
+									?>
+
+									<?php if ( $row['cuota'] == $user_tv['cuota'] ) { ?>
+										<tr>
+											<td>1</td>
+											<td>Servicio de Televisión</td>
+											<td class="hidden-480">Servicio de Televisión por el mes de <?php echo $row['mes'];?></td>
+											<td class="hidden-480">1 mes</td>
+											<td class="hidden-480">S/. <?php echo ($row['cuota']-$row['cuotas']);?>.00</td>
+											<td>S/. <?php echo ($row['cuota']-$row['cuotas']);?>.00</td>
+										</tr>
+									<?php } elseif ( $row['fecha_generada'] < $user_tv['fecha_afiliacion'] ) { ?>
+										<tr>
+											<td>1</td>
+											<td>Servicio de Internet</td>
+											<td class="hidden-480">Servicio de internet por el mes de <?php echo $row['mes'];?></td>
+											<td class="hidden-480">1 mes</td>
+											<td class="hidden-480">S/. <?php echo $row['cuota'];?></td>
+											<td>S/. <?php echo $row['cuotas'];?></td>
+										</tr>
+									<?php } else { ?>
+										<tr>
+											<td>1</td>
+											<td>Servicio de Internet</td>
+											<td class="hidden-480">Servicio de internet por el mes de <?php echo $row['mes'];?></td>
+											<td class="hidden-480">1 mes</td>
+											<td class="hidden-480">S/. <?php echo $row['cuotas'];?></td>
+											<td>S/. <?php echo $row['cuotas'];?></td>
+										</tr>
+
+										<tr>
+											<td>1</td>
+											<td>Servicio de Televisión</td>
+											<td class="hidden-480">Servicio de Televisión por el mes de <?php echo $row['mes'];?></td>
+											<td class="hidden-480">1 mes</td>
+											<td class="hidden-480">S/. <?php echo ($row['cuota']-$row['cuotas']);?>.00</td>
+											<td>S/. <?php echo ($row['cuota']-$row['cuotas']);?>.00</td>
+										</tr>
+									<?php } ?>
+
+								<?php } ?>
+							</tbody>
 								</table>
 							</div>
 						</div>
@@ -155,10 +146,10 @@
 							</div>
 							<div class="col-xs-8 invoice-block">
 								<ul class="list-unstyled amounts">
-									<li><strong>Sub - Total:</strong> S/. <?php echo $row['cuota'];?>.00</li>
+									<li><strong>Sub - Total:</strong> S/. <?php echo $row['cuota'];?></li>
 									<li><strong>Descuento:</strong> 0.00 </li>
 									<li><strong>IGV:</strong> -----</li>
-									<li><strong>Total a Pagar:</strong> S/. <?php echo $row['cuota'];?>.00</li>
+									<li><strong>Total a Pagar:</strong> S/. <?php echo $row['cuota'];?></li>
 								</ul>
                                <p style="text-align:left;"><strong>Comentario:</strong> <?php echo $row['mensaje'];?></p>
 								<br/>

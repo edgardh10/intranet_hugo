@@ -213,7 +213,7 @@ class Logistica extends CI_Controller {
 					redirect(base_url().'login');
 				}
 		$data['torres'] = $this->m_logistica->get_torres();
-		$data['distrito'] = $this->m_clientes->get_distrito();
+		$data['departamentos'] = $this->m_clientes->get_departamentos();
 		$data['title'] = 'Torres de Transmisión';
 		$data['title_modal'] = 'Agregar / Editar Torre';
 		$data['recurso'] = 'tablas';

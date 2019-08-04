@@ -98,7 +98,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-	 2015 &copy; Multitel RM
+	 <?php echo date('Y'); ?> &copy; <a href="http://www.megasystemas.com" href="_blank" style="color: #fff;">Megasystemas</a>
 </div>
 <!-- END COPYRIGHT -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

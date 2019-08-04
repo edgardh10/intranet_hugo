@@ -15,7 +15,13 @@ class Facturas extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['facturas'] = $this->m_facturas->factura_inpagas();
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data['facturas'] = $this->m_facturas->factura_inpagas();
+		} else {
+			$data['facturas'] = $this->m_facturas->factura_inpagas_group();
+		}
+
 		$data['title'] = 'Facturas Pendientes de cancelación';
 		$data['recurso'] = 'tablas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -67,7 +73,8 @@ class Facturas extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['generar'] = $this->m_facturas->seleccionar_datos();
+		$data['generar_datos'] = $this->m_facturas->seleccionar_datos();
+		$data['generar_tv'] = $this->m_facturas->seleccionar_television();
 		$data['title'] = 'Generar Factura a todos los clientes';
 		$data['recurso'] = 'generar_facturas';
 		$this->load->view('backend/plantilla/header-recursos', $data);
@@ -82,7 +89,7 @@ class Facturas extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data['row'] = $this->m_facturas->factura_detalle($pagosID);
+		$data['row'] = $this->m_facturas->factura_detalle($pagosID);		
 		$data['distrito'] = $this->m_clientes->get_distrito();
 		if (empty($data['row'])){show_404();}
 		$data['title'] = $data['row']['apellido'];

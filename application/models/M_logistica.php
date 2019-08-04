@@ -128,7 +128,7 @@
 		public function get_torres(){
 			$this->db->select('*');	
 			$this->db->from('torres');
-			$this->db->join('distrito', 'torres.distritoID = distrito.distritoID');
+			$this->db->join('distritos', 'torres.distritoID = distritos.id');
 			$query = $this->db->get();
 			return $query->result_array();
 		}
@@ -155,7 +155,7 @@
 			$this->db->from('equipos');
 			$this->db->join('usuarios', 'equipos.equiposID = usuarios.equiposID');
 			$this->db->join('equipos_marca', 'equipos_marca.marcasID = equipos.marcasID');
-			$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
 			$this->db->where('control !=', 'retirado');
 			$query = $this->db->get();
 			return $query->result_array();
@@ -165,7 +165,7 @@
 			$this->db->from('equipos');
 			$this->db->join('usuarios', 'equipos.mac = usuarios.mac');
 			$this->db->join('equipos_marca', 'equipos_marca.marcasID = equipos.marcasID');
-			$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
 			$this->db->where('control !=', 'retirado');
 			$query = $this->db->get();
 			return $query->result_array();
@@ -174,7 +174,7 @@
 			$this->db->select('*');
 			$this->db->from('torres');
 			$this->db->join('usuarios', 'torres.torreID = usuarios.torreID');
-			$this->db->join('distrito', 'distrito.distritoID = torres.distritoID');
+			$this->db->join('distritos', 'distritos.id = torres.distritoID');
 			$this->db->where('usuarios.control !=', 'retirado');
 			$query = $this->db->get();
 			return $query->result_array();

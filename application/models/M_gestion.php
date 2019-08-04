@@ -6,18 +6,32 @@
 		{
 		//$this->load->database();
 		}
-		public function soporte_cerrado(){
-				$this->db->select('*');
-				$this->db->from('soporte');
-				$this->db->join('usuarios', 'soporte.s_cliente = usuarios.usuario');
-				$this->db->where('s_estado', 'cerrado');
-				$this->db->where('s_mensaje_directo', 'no');
-				$query = $this->db->get();
-				return $query->result_array();
-			}
+		public function soporte_cerrado()
+		{
+			$this->db->select('*');
+			$this->db->from('soporte');
+			$this->db->join('usuarios', 'soporte.s_cliente = usuarios.usuario');
+			$this->db->where('s_estado', 'cerrado');
+			$this->db->where('s_mensaje_directo', 'no');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+
+		public function groups_soporte_cerrado()
+		{
+			$this->db->select('soporteID, usuarios.usuarioID, usuario, nombre, apellido, s_problema, s_comentario, s_fecha_visita, s_estado');
+			$this->db->from('soporte');
+			$this->db->join('usuarios', 'soporte.s_cliente = usuarios.usuario');
+			$this->db->join('permisos_torre', 'usuarios.torreID = permisos_torre.torreID');
+			$this->db->where('permisos_torre.usuarioID', $this->session->userdata('usuarioID'));
+			$this->db->where('s_estado', 'cerrado');
+			$this->db->where('s_mensaje_directo', 'no');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
 			
 		public function soporte_uno($soporteID = FALSE)
-			{
+		{
 			if ($soporteID === FALSE)
 			{	
 				$this->db->select('*');
@@ -35,7 +49,21 @@
 				$this->db->where('soporteID', $soporteID);
 				$query = $this->db->get_where();
 				return $query->row_array();
-			}
+		}
+
+		public function groups_soporte()
+		{
+			$this->db->select('soporteID, usuarios.usuarioID, usuario, nombre, apellido, s_problema, s_comentario, s_fecha_visita, s_estado');
+			$this->db->from('soporte');
+			$this->db->join('usuarios', 'soporte.s_cliente = usuarios.usuario');
+			$this->db->join('permisos_torre', 'usuarios.torreID = permisos_torre.torreID');
+			$this->db->where('permisos_torre.usuarioID', $this->session->userdata('usuarioID'));
+			$this->db->where('s_estado !=', 'cerrado');
+			$this->db->where('s_mensaje_directo', 'no');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+
 		public function ventas_uno($ventasID = FALSE){//trae todas las ventas se filtra en la vista
 				if ($ventasID === FALSE)
 				{

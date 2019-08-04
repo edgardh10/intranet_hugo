@@ -33,13 +33,23 @@
 							<input name="apellido" type="text" value="<?php echo $row['apellido'];?>" class="form-control"/>
 						</div>
 						<div class="form-group">
+							<label class="control-label"><strong>Departamento</strong></label>
+							<select name="distritoID" id="departamento" class="form-control">
+	                            <?php foreach ($departamentos as $d): ?>
+	                                <option value="<?php echo $d['id'] ?>" <?php if($d['id'] == $departamento['id']) { echo 'selected'; } ?>><?php echo $d['departamento'] ?></option>
+	                            <?php endforeach ?>
+                            </select>
+						</div>
+						<div class="form-group">
+							<label class="control-label"><strong>Provincia</strong></label>
+							<select name="provinciaID" id="provincia" class="form-control">
+                            	<option value="<?php echo $provincia['id'];?>"><?php echo $provincia['provincia'];?></option>
+                            </select>
+						</div>
+						<div class="form-group">
 							<label class="control-label"><strong>Distrito</strong></label>
-							<select name="distritoID" class="form-control">
-                            <option value="<?php echo $row['distritoID'];?>"><?php echo $row['distrito'];?></option>
-                            <?php foreach ($distrito as $dist): ?>
-                                <option value="<?php echo $dist['distritoID'] ?>"><?php echo $dist['distrito'] ?></option>
-                                <?php endforeach ?>
-                            
+							<select name="distritoID" id="distrito" class="form-control">
+                            	<option value="<?php echo $row['distritoID'];?>"><?php echo $row['distrito'];?></option>
                             </select>
 						</div>
 						<div class="form-group">

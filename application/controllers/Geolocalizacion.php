@@ -42,6 +42,7 @@ class Geolocalizacion extends CI_Controller {
 		}
 
 		$data['title'] = 'Geolocalizacion Clientes';
+		$data['recurso'] = '';
 
 		$this->load->view('backend/plantilla/header-recursos', $data);
 		$this->load->view('backend/plantilla/header', $data);
@@ -58,7 +59,13 @@ class Geolocalizacion extends CI_Controller {
 		{
 			redirect(base_url().'login');
 		}
-		$data_maps = $this->m_geolocalizacion->all_data_markers();
+
+		if ($this->session->userdata('nivel') != 'empleado') {
+			$data_maps = $this->m_geolocalizacion->all_data_markers();
+		} else {
+			$data_maps = $this->m_geolocalizacion->all_data_markers_group();
+		}
+		
 		header('Content-type: text/xml');
 		echo '<markers>';
 			foreach ($data_maps as $key => $value) {

@@ -47,6 +47,7 @@
                             <li><a href="<?php echo base_url();?>facturas/aprobar"><i class="icon-basket-loaded"></i> Facturas por aprobar</a></li>
                             <li><a href="<?php echo base_url();?>facturas/pagadas"><i class="icon-basket-loaded"></i> Facturas Pagadas</a></li>
 							<li><a href="<?php echo base_url();?>facturas/generar"><i class="icon-doc"></i> Generar Factura</a></li>
+
 						</ul>
 					</li>
                     <li class="menu-dropdown classic-menu-dropdown ">
@@ -113,9 +114,12 @@
 						</a>
 						<ul class="dropdown-menu pull-left">
 							<li><a href="<?php echo base_url();?>facturas/"><i class="icon-basket"></i> Facturas inpagas</a></li>
+
+							<?php if ($this->session->userdata('nivel') != 'empleado') { ?>
                             <li><a href="<?php echo base_url();?>facturas/aprobar"><i class="icon-basket-loaded"></i> Facturas por aprobar</a></li>
                             <li><a href="<?php echo base_url();?>facturas/pagadas"><i class="icon-basket-loaded"></i> Facturas Pagadas</a></li>
 							<li><a href="<?php echo base_url();?>facturas/generar"><i class="icon-doc"></i> Generar Factura</a></li>
+							<?php } ?>
 						</ul>
 					</li>
                     <?php } ?>

@@ -8,71 +8,158 @@
 		}
 		// FUNCION PARA TRAER CLIENTES ACTIVOS
 		public function get_usuario($usuarioID = FALSE)
-			{
+		{
 			if ($usuarioID === FALSE)
-			{
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
-				$this->db->where('nivel', 'cliente');
-				$this->db->where('control', 'activado');
-				$this->db->order_by('usuarioID', 'DESC');
-				$query = $this->db->get();
-				
-				//$query = $this->db->get('usuarios');
-				return $query->result_array();
-			}
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
-				$this->db->where('nivel', 'cliente');
-				//$this->db->where('control', 'activado');
-				$this->db->where('usuarioID', $usuarioID);
-				$query = $this->db->get_where();
-				return $query->row_array();
-			}
-		// FUNCION PARA TRAER CLIENTES MOROSOS
-		public function usuarios_morosos(){
-				$this->db->select('nombre,apellido,usuario,Count(usuario) AS total,direccion,usuarios.usuarioID,usuarios.cuotas,correo,correo_control,distrito');
-				$this->db->from('usuarios');
-				$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
-				$this->db->where('estado', 'inpago');
-				$this->db->group_by("usuario");
-				$this->db->order_by('total', 'DESC');
-				$query = $this->db->get();
-				return $query->result_array();
-			}
-		// FUNCION PARA TRAER CLIENTES DESACTIVADOS
-		public function usuarios_desactivados(){
-			
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
-				$this->db->where('nivel', 'cliente');
-				$this->db->where('control', 'retirado');
-				$query = $this->db->get();
-				return $query->result_array();
-			
-			}
-		// FUNCION PARA TRAER A LOS CLIENTES CORTADOS
-		public function usuarios_cortados(){
-			
-				$this->db->select('*');
-				$this->db->from('usuarios');
-				$this->db->join('distrito', 'distrito.distritoID = usuarios.distritoID');
-				$this->db->where('nivel', 'cliente');
-				$this->db->where('control', 'cortado');
-				$query = $this->db->get();
-				return $query->result_array();
-			
-			}
-		// FUNCION PARA TRAER DISTRITOS
-		public function get_distrito(){
-			
-			$query = $this->db->get('distrito');
+				{
+					$this->db->select('*');
+					$this->db->from('usuarios');
+					$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+					$this->db->where('nivel', 'cliente');
+					$this->db->where('control', 'activado');
+					$this->db->order_by('usuarioID', 'DESC');
+					$query = $this->db->get();
+					
+					return $query->result_array();
+				}
+					$this->db->select('*');
+					$this->db->from('usuarios');
+					$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+					$this->db->where('nivel', 'cliente');
+					//$this->db->where('control', 'activado');
+					$this->db->where('usuarioID', $usuarioID);
+					$query = $this->db->get_where();
+					return $query->row_array();
+		}
+
+		// funcion para grupo de usuarios administrados
+
+		public function users_group($status)
+		{
+			$this->db->select('usuarios.usuarioID, usuarios.usuario, usuarios.nombre, usuarios.apellido, usuarios.cuotas, usuarios.correo,distritos.distrito');
+			$this->db->from('usuarios');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+			$this->db->join('permisos_torre', 'usuarios.torreID = permisos_torre.torreID');
+			$this->db->where('permisos_torre.usuarioID', $this->session->userdata('usuarioID'));
+			// $this->db->where('permisos_torre.usuarioID', 197);
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('control', $status);
+			$this->db->order_by("usuarios.usuarioID", 'DESC');
+			$query = $this->db->get();
 			return $query->result_array();
+		}
+
+		public function user_group($usuarioID)
+		{
+			$this->db->select('*');
+			$this->db->from('usuarios');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+			$this->db->join('permisos_torre', 'usuarios.torreID = permisos_torre.torreID');
+			$this->db->where('permisos_torre.usuarioID', $this->session->userdata('usuarioID'));
+			// $this->db->where('permisos_torre.usuarioID', 197);
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('usuarios.usuarioID', $usuarioID);
+			$query = $this->db->get_where();
+			return $query->row_array();
+		}
+
+		public function users_group_morosos()
+		{
+			$this->db->select('nombre,apellido,usuario,Count(usuario) AS total,direccion,usuarios.usuarioID,usuarios.cuotas,correo,correo_control,distrito');
+			$this->db->from('usuarios');
+			$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+			$this->db->join('permisos_torre', 'usuarios.torreID = permisos_torre.torreID');
+			$this->db->where('permisos_torre.usuarioID', $this->session->userdata('usuarioID'));
+			// $this->db->where('permisos_torre.usuarioID', 197);
+			$this->db->where('estado', 'inpago');
+			$this->db->group_by("usuario");
+			$this->db->order_by('total', 'DESC');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+
+
+
+		// FUNCION PARA TRAER CLIENTES MOROSOS
+		public function usuarios_morosos()
+		{
+			$this->db->select('nombre,apellido,usuario,Count(usuario) AS total,direccion,usuarios.usuarioID,usuarios.cuotas,correo,correo_control,distrito');
+			$this->db->from('usuarios');
+			$this->db->join('pagos', 'usuarios.usuarioID = pagos.usuarioID');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+			$this->db->where('estado', 'inpago');
+			$this->db->group_by("usuario");
+			$this->db->order_by('total', 'DESC');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+		// FUNCION PARA TRAER CLIENTES DESACTIVADOS
+		public function usuarios_desactivados()
+		{		
+			$this->db->select('*');
+			$this->db->from('usuarios');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('control', 'retirado');
+			$query = $this->db->get();
+			return $query->result_array();
+		
+		}
+		// FUNCION PARA TRAER A LOS CLIENTES CORTADOS
+		public function usuarios_cortados()
+		{
+			$this->db->select('*');
+			$this->db->from('usuarios');
+			$this->db->join('distritos', 'distritos.id = usuarios.distritoID');
+			$this->db->where('nivel', 'cliente');
+			$this->db->where('control', 'cortado');
+			$query = $this->db->get();
+			return $query->result_array();
+		}
+		
+		public function get_departamentos()
+		{
+			$query = $this->db->get('departamentos');
+			return $query->result_array();
+		}
+
+		public function get_provincias()
+		{
+			$departamentoID = $this->input->post('departamentoID');
+
+			$query = $this->db->get_where('provincias', array('departamentoID' => $departamentoID));
+
+			$provincias = $query->result_array();
+
+			$html= "<option value='0'>Seleccionar Provincia</option>";
+
+			foreach ($provincias as $key => $provincia) {
+				
+				$html.= "<option value='".$provincia['id']."'>".$provincia['provincia']."</option>";
+
 			}
+			
+			echo $html;
+		}
+
+		public function get_distritos()
+		{
+			$provinciaID = $this->input->post('provinciaID');
+	
+			$query = $this->db->get_where('distritos', array('provinciaID' => $provinciaID));
+
+			$distritos = $query->result_array();
+			
+			$html= "<option value='0'>Seleccionar Distrito</option>";
+
+			foreach ($distritos as $key => $distrito) {
+				
+				$html.= "<option value='".$distrito['id']."'>".$distrito['distrito']."</option>";
+
+			}
+
+			echo $html;
+		}
 			
 		// METODO PARA AGREGAR CLIENTES
 		public function add_cliente()
@@ -101,7 +188,7 @@
 		
 		// METODO PARA ACTUALIZAR UN CLIENTE	
 		public function update_cliente($usuarioID = FALSE)
-			{
+		{
 			if ($usuarioID === FALSE){
 				error_404;
 				}
@@ -119,26 +206,39 @@
 			$this->db->where('usuarioID', $usuarioID);
 			$this->db->update('usuarios', $data); 
 			
-			}
+		}
 		
-		public function factura_individual(){
+		public function factura_individual()
+		{
+			$cuota = $this->input->post('cuota');
+
+			$user_tv = $this->db->get_where('television' , array('usuarioID' => $this->input->post('usuarioID'), 'status' => 1 )); // verificamos si el usuario tiene un plan de tv
+
+			if ( $user_tv->num_rows() == 1 ) { // si lo tiene, entonces agregamos el costo de su plan a la factura
+			
+				$user_tv = $user_tv->row_array();
+
+				$cuota = $this->input->post('cuota') + $user_tv['cuota']; // cuota asignada: datos + tv
+
+			}
+
 			$data = array(
 				'usuarioID' => $this->input->post('usuarioID'),
 				'fecha_vencimiento' => $this->input->post('fecha_vencimiento'),
 				'mes' => $this->input->post('mes'),
 				'referencia' => $this->input->post('referencia'),
-				'cuota' => $this->input->post('cuota'),
+				'cuota' => $cuota,
 				'mensaje' => $this->input->post('mensaje')
 			);
 			return $this->db->insert('pagos', $data);
-			}
+		}
 			
 		public function get_torre($usuarioID)
 		{ // traer torre por usuario
 			$this->db->select('torre, distrito, nombre, apellido');
 			$this->db->from('usuarios');
 			$this->db->join('torres', 'usuarios.torreID = torres.torreID');
-			$this->db->join('distrito', 'torres.distritoID = distrito.distritoID');
+			$this->db->join('distritos', 'torres.distritoID = distritos.id');
 			$this->db->where('usuarioID', $usuarioID);
 			$query = $this->db->get_where();
 			return $query->row_array();
@@ -199,7 +299,9 @@
 				$query = $this->db->get();
 				return $query->result_array();
 		}
-		public function add_telefono(){
+		
+		public function add_telefono()
+		{
 			$data = array(
 				'usuarioID' => $this->input->post('usuarioID'),
 				'tel_telefono' => $this->input->post('tel_telefono'),
@@ -208,7 +310,8 @@
 			$this->db->insert('telefonos', $data);
 		}
 		
-		public function update_telefono($telefonoID){
+		public function update_telefono($telefonoID)
+		{
 			$data = array(
 				'usuarioID' => $this->input->post('usuarioID'),
 				'tel_telefono' => $this->input->post('tel_telefono'),
@@ -218,7 +321,8 @@
 			$this->db->update('telefonos', $data);
 		}
 		
-		public function asign_radio($usuarioID){// asignar una radio al cliente
+		public function asign_radio($usuarioID)
+		{// asignar una radio al cliente
 			$equipo = $this->input->post('mac');
 			$data = array(
 				'asignado' => $this->input->post('asignado')
@@ -276,7 +380,30 @@
 			);
 			$this->db->where('usuarioID', $usuarioID);
 			$this->db->update('usuarios', $data);
+		}
+
+		public function name_departamento_provincia($usuarioID, $u)
+		{
+			$distrito = $this->db->get_where('usuarios', array('usuarioID' => $usuarioID))->row_array();
+			$distritoID = $distrito['distritoID'];
+			
+			$find_provincia = $this->db->get_where('distritos', array('id' => $distritoID))->row_array();
+			$provinciaID = $find_provincia['provinciaID'];
+			
+			$provincia = $this->db->get_where('provincias', array('id' => $provinciaID))->row_array();
+			$departamentoID = $provincia['departamentoID'];
+
+			$departamento = $this->db->get_where('departamentos', array('id' => $departamentoID))->row_array();
+
+			if ($u == 'provincia') {
+				return $provincia;
 			}
+
+			if ($u == 'departamento') {
+				return $departamento;
+			}
+
+		}
 		
 /*		public function get_personal()
 				{// CHAT CON EL PERSONAL Y CLIENTES

@@ -13,6 +13,26 @@ var FormWizard = function () {
                 return /*"<img class='flag' src='http://localhost/multitel/recursos/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + */state.text;
             }
 
+            $("#departamento").select2({
+                placeholder: "Seleccionar...",
+                allowClear: true,
+                formatResult: format,
+                formatSelection: format,
+                escapeMarkup: function (m) {
+                    return m;
+                }
+            });
+
+            $("#provincia").select2({
+                placeholder: "Seleccionar...",
+                allowClear: true,
+                formatResult: format,
+                formatSelection: format,
+                escapeMarkup: function (m) {
+                    return m;
+                }
+            });
+
             $("#distrito").select2({
                 placeholder: "Seleccionar...",
                 allowClear: true,
@@ -59,6 +79,12 @@ var FormWizard = function () {
                         email: true
                     },
                     sexo: {
+                        required: true
+                    },
+                    departamentoID: {
+                        required: true
+                    },
+                    provinciaID: {
                         required: true
                     },
                     distritoID: {
@@ -250,6 +276,14 @@ var FormWizard = function () {
             }).hide();
 
             //apply validation on select2 dropdown value change, this only needed for chosen dropdown integration.
+            $('#departamento', form).change(function () {
+                form.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
+
+            $('#provincia', form).change(function () {
+                form.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
+
             $('#distrito', form).change(function () {
                 form.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
             });
